@@ -1,0 +1,10 @@
+# Only for local development and testing purposes
+services:
+     hub:
+        build: .
+        container_name: hub
+        restart: unless-stopped
+        ports:
+            - "50001:80"
+        environment:
+          INSTANCE_URLS: '[{"name":"Kopia 1", "url":"http://localhost:51515"},{"name":"Kopia 2", "url":"http://localhost:51516"}]'

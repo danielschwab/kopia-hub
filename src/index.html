@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopia Instances</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-wrapper {
+            padding: 12px;
+            background-color: #f1f1f1;
+        }
+        .dropdown {
+            margin-bottom: 8px;
+        }
+        iframe {
+            width: 100%;  
+            flex-grow: 1;
+            border: none;
+        }
+    </style>
+<script>
+        function updateIframe() {
+            const select = document.getElementById('instanceSelect');
+            const iframe = document.getElementById('embeddedIframe');
+            iframe.src = select.value; // Update the iframe source
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('config.json')
+                .then(response => response.json())
+                .then(instances => {
+                    const instanceSelect = document.getElementById('instanceSelect');
+                    instances.forEach((instance, index) => {
+                        const option = document.createElement('option');
+                        option.value = instance.url;
+                        option.textContent = instance.name || `Instance ${index + 1}`;
+                        instanceSelect.appendChild(option);
+                    });
+
+                    // Trigger change to set initial iframe source
+                    updateIframe();
+                })
+                .catch(error => console.error('Error loading configuration:', error));
+        });
+    </script>
+</head>
+<body>
+    <div class="content-wrapper">
+        <h1>Kopia Instances</h1>
+        <div class="dropdown">
+            <select id="instanceSelect" class="form-control" onchange="updateIframe()"></select>
+        </div>
+    </div>
+
+    <iframe id="embeddedIframe" title="Embedded Website"></iframe>
+</body>
+</html>
